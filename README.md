@@ -5,11 +5,11 @@ Register policies in a startup class:
 
     public void ConfigureServices(IServiceCollection services)
     {
-        // other configurations
+        // other configurations               
         services
             .AddPolicyRegistry()
-            .AddRetryPolicy(configuration.GetValue<int>("MyConfig:RetryCount"))
-            .AddTimeoutPolicy(configuration.GetValue<int>("MyConfig:TimeoutSeconds"));
+            .AddRetryPolicy(5)
+            .AddTimeoutRetryAndWaitPolicy(3, 30);
     }
                 
 Usage example:
@@ -17,8 +17,10 @@ Usage example:
     private static IAsyncPolicy<HttpResponseMessage> PolicySelector(IReadOnlyPolicyRegistry<string> registry,
             HttpRequestMessage message)
     {
-        var simpleRetry = registry.GetRetryPolicy();
-        var timeoutPolicy = registry.GetTimeoutPolicy();
+        if (message.Method == HttpMethod.Get)
+        {
+            return registry.GetTimeoutRetryAndWaitPolicy();
+        }
         
-        return simpleRetry.WrapAsync(timeoutPolicy);
+        return registry.GetRetryPolicy();;
     }
