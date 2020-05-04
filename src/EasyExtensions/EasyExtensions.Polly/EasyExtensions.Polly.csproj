@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Artem Mikulich</Authors>
     <Company />
@@ -10,7 +10,7 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/amikulich/easyextensions.polly</PackageProjectUrl>
     <RepositoryUrl>https://github.com/amikulich/easyextensions.polly</RepositoryUrl>
-    <PackageReleaseNotes>Added combined retry+timeout policy</PackageReleaseNotes>
+    <PackageReleaseNotes>Bug fixes</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
