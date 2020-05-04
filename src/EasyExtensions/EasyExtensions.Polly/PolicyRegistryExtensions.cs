@@ -62,7 +62,7 @@ namespace EasyExtensions.Polly
 
         public static IAsyncPolicy<HttpResponseMessage> GetTimeoutRetryAndWaitPolicy(this IReadOnlyPolicyRegistry<string> policyRegistry, string prefix = "")
         {
-            var policy = policyRegistry.Get<IAsyncPolicy<HttpResponseMessage>>($"{prefix}:{RetryPolicyName}");
+            var policy = policyRegistry.Get<IAsyncPolicy<HttpResponseMessage>>($"{prefix}:{TimeoutRetryAndWaitPolicy}");
 
             return policy;
         }
