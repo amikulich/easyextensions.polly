@@ -1,26 +1,30 @@
 # easyextensions.polly
-A set of predefined most-common Polly policies
-
-Register policies in a startup class:
 
     public void ConfigureServices(IServiceCollection services)
     {
-        // other configurations               
-        services
-            .AddPolicyRegistry()
-            .AddRetryPolicy(5)
-            .AddTimeoutRetryAndWaitPolicy(3, 30);
-    }
-                
-Usage example:
+        services.AddMemoryCache();
+        services.AddSingleton<IAsyncCacheProvider, MemoryCacheProvider>();
+        services.AddContextSetters();
+        services.AddPolicyRegistry();
 
-    private static IAsyncPolicy<HttpResponseMessage> PolicySelector(IReadOnlyPolicyRegistry<string> registry,
-            HttpRequestMessage message)
-    {
-        if (message.Method == HttpMethod.Get)
-        {
-            return registry.GetTimeoutRetryAndWaitPolicy();
-        }
-        
-        return registry.GetRetryPolicy();;
+        services.AddHttpClient<SampleApiClient>()
+            .ConfigureHttpClient(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost");
+            })
+            .CachePerUriAndMethod()
+            .AddPolicyHandlerFromRegistry((registry, request) => registry.GetCachePolicyFor<SampleApiClient>());
+
+        services.AddControllers();
     }
+
+    public void Configure(IApplicationBuilder app, 
+                IWebHostEnvironment env,
+                IPolicyRegistry<string> policyRegistry,
+                IAsyncCacheProvider cacheProvider)
+    {
+        policyRegistry.AddCachePolicyFor<SampleApiClient>(cacheProvider, TimeSpan.FromSeconds(60));
+        
+        /* ... */
+    }
+
