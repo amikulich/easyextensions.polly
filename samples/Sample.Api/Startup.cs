@@ -40,7 +40,7 @@ namespace Sample.Api
             services.AddHttpClient<SampleApiClient>()
                 .ConfigureHttpClient(client =>
             {
-                client.BaseAddress = new Uri("https://localhost");
+                client.BaseAddress = new Uri("https://github.com/amikulich");
             })
                 .CachePerUriAndMethod()
                 .AddPolicyHandlerFromRegistry((registry, request) => registry.GetCachePolicyFor<SampleApiClient>());

@@ -17,7 +17,8 @@ namespace Sample.Api.Client
 
         public async Task<string> Get()
         {
-            var response = await _httpClient.GetAsync("packages/Polly");
+            // the very first call will hit https://github.com/amikulich. The further calls will take data from cache.
+            var response = await _httpClient.GetAsync("amikulich");
 
             return await response.Content.ReadAsStringAsync();
         }
